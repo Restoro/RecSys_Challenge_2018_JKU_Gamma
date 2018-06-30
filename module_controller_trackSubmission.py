@@ -124,8 +124,16 @@ def readChallengeFileAndCallOthers():
     # returns dict of pid (challengeset) and values: list of tracks
     # If I give 100, 300 get back (100 original + 2 per track)
     ##similarTrackDict = pickle_utility.load("MarkovOut") #comes from this call: module_markov.enrich_playlists(playlists_max, 3)
+
+    similarTrackDict = module_markov.enrich_playlists(dict(itertools.islice(playlists_max.items(), 0, 4000)), 5)
+    similarTrackDict.update(module_markov.enrich_playlists(dict(itertools.islice(playlists_max.items(), 4000, 6000)), 4))
+    similarTrackDict.update(module_markov.enrich_playlists(dict(itertools.islice(playlists_max.items(), 6000, 8000)), 3))
+    similarTrackDict.update(module_markov.enrich_playlists(dict(itertools.islice(playlists_max.items(), 8000, None)), 2))
+
+    '''
     similarTrackDict = module_markov.enrich_playlists(dict(itertools.islice(playlists_max.items(), 0, 8000)), 5)
     similarTrackDict.update(module_markov.enrich_playlists(dict(itertools.islice(playlists_max.items(), 8000, None)), 2))
+    '''
     # similarTrackDict = module_markov.enrich_playlists(playlists_max, 3)
     #similarTrackDict = module_markov_500.enrich_playlists(playlists_max, 3)  # cannot be ensured that I actually get 3, count to make sure!
 
@@ -255,17 +263,17 @@ def readChallengeFileAndCallOthers():
     getTracksfromTracks(pid_dict, currentDict, currentDict, submitArray)
     '''
 	############################ CREATE SUBMISSION FILE WITH TRACKS ################################
-    '''
+    
     #patrick sends tracks
-    print("Starting with challenge 1-3")
-    currentDict = dict(itertools.islice(similarNameDict.items(), 0, 3000))
-    compensatoryDict = dict(itertools.islice(similarTrackDict.items(), 0, 3000))
+    print("Starting with challenge 1-2")
+    currentDict = dict(itertools.islice(similarNameDict.items(), 0, 2000))
+    compensatoryDict = dict(itertools.islice(similarTrackDict.items(), 0, 2000))
     getTracksfromTracksAndTracks(pid_dict, currentDict, compensatoryDict, submitArray)
-    print("Starting with challenge 4")
-    currentDict = dict(itertools.islice(similarTrackDict.items(), 3000, None))
+    print("Starting with challenge 3-10")
+    currentDict = dict(itertools.islice(similarTrackDict.items(), 2000, None))
     getTracksfromTracks(pid_dict, currentDict, currentDict, submitArray)
-    '''
 
+    '''
     #patrick sends tracks
     print("Starting with challenge 1-3")
     currentDict = dict(itertools.islice(similarNameDict.items(), 0, 3000))
@@ -288,7 +296,7 @@ def readChallengeFileAndCallOthers():
     print("Starting with challenge 9&10") # None instead of end
     currentDict = dict(itertools.islice(similarTrackDict.items(), 8000, None))
     getTracksfromTracks(pid_dict, currentDict, currentDict, submitArray)
-
+    '''
     '''
     #Max does 90%:
     for idAndTrack in submitArray:
